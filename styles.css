@@ -145,7 +145,8 @@ body {
     position: absolute;
     bottom: 88px;
     right: 17px;
-    opacity: var(--a);
+    
+    opacity: 1;
     transition: all 1s ease-out;
 }
 
