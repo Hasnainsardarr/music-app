@@ -3,6 +3,20 @@
 
 let currentSong = new Audio()
 
+function secondsToMinutesSeconds(seconds) {
+    if (isNaN(seconds) || seconds < 0) {
+        return "00:00";
+    }
+
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+
+    return `${formattedMinutes}:${formattedSeconds}`;
+}
+
 async function getSongs(){
 let a = await fetch("http://127.0.0.1:3000/songs/")
 let response = await a.text() ;
@@ -24,6 +38,8 @@ const playMusic = (track) => {
  currentSong.src = "/songs/"+ track
    currentSong.play()
    play.src="../img/pause.svg"
+   document.querySelector(".songinfo").innerHTML = decodeURI(track)
+   document.querySelector(".songtime").innerHTML = "00:00/00:00"
 }
 // function playMusic(track) {
 //     currentSong.src = "/songs/" + track;
@@ -97,8 +113,47 @@ let songUL = document.querySelector(".songList").getElementsByTagName("ul")[0]
 
 
 
+    function playMusic(track) {
+        currentSong.src = "/songs/" + track;
+        currentSong.play();
+      
+        if (currentSong.paused) {
+          play.src = "img/play.svg"; // Set play icon if paused
+        } else {
+          play.src = "img/pause.svg"; // Set pause icon if playing
+        }
+      
+    //     // Add event listener to currentSong (assuming it's defined elsewhere)
+    //     currentSong.addEventListener("timeupdate", () => {
+    //       console.log(currentSong.currentTime, currentSong.duration);
+    //       document.querySelector(".songtime").innerHTML = `${secondsToMinutesSeconds(currentSong.currentTime)} / ${secondsToMinutesSeconds(currentSong.duration)}`;
+    //     });
+    //   }
+      
+    //   // Assuming you have a function to format time (secondsToMinutesSeconds)
+    //   // ...
+      
+    //   main(); // No semicolon needed here
+      
+    //   // Play the first song (assuming songs array is populated)
+    //   currentSong.src = "/songs/" + songs[0];
+    //   currentSong.play();
+
+
+
+
+    currentSong.addEventListener("timeupdate", ()=>{
+    console.log(currentSong.currentTime, currentSong.duration)
+    document.querySelector(".songtime").innerHTML = `${secondsToMinutesSeconds(currentSong.currentTime)} / ${secondsToMinutesSeconds(currentSong.duration)}`
+    
+    })
+    
+
+
+
     var audio = new Audio(songs[0]);
      audio.play(); 
     
 }
 main()
+}
